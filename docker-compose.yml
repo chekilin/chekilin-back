@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  backend:
+    container_name: app
+    build:
+      context: ./app
+      args:
+        - target=dev
+    volumes:
+      - .:/app
+    ports:
+      - "18000:8080"

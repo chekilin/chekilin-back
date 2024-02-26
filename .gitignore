@@ -1,0 +1,7 @@
+# Hidden folders created by development with goLand
+.idea
+
+# ignore files
+.DS_Store
+tmp
+
