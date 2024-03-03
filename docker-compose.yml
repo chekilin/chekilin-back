@@ -2,12 +2,13 @@ version: "3"
 
 services:
   backend:
-    container_name: app
+    container_name: backend
     build:
-      context: ./app
+      context: .
+      dockerfile: ./app/Dockerfile
       args:
         - target=dev
     volumes:
-      - .:/app
+      - ./app:/app
     ports:
-      - "18000:8080"
+      - "18000:80"
