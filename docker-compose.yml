@@ -22,16 +22,12 @@ services:
 
   db:
     image: mysql:8.0.29
+    env_file: docker-env/db_env_file
     platform: linux/amd64
     container_name: cheki-db
     volumes:
       - db-data:/var/lib/mysql
       - ./app/_tools/mysql/conf.d:/etc/mysql/conf.d:cached
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=password
-      - MYSQL_DATABASE=cheki
     ports:
       - "33306:3306"
 

@@ -1,0 +1,6 @@
+`db_env_file`に
+- MYSQL_ROOT_PASSWORD
+- MYSQL_USER
+- MYSQL_PASSWORD
+- MYSQL_DATABASE
+を設定しておく。
