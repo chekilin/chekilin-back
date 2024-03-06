@@ -8,7 +8,6 @@ import (
 	"os"
 
 	"cheki-back/config"
-	"cheki-back/controller"
 )
 
 func main() {
@@ -32,7 +31,7 @@ func run(ctx context.Context) error {
 	url := fmt.Sprintf("http://%s", l.Addr().String())
 	log.Printf("start with: %v", url)
 
-	mux, cleanup, err := controller.NewMux(ctx, cfg)
+	mux, cleanup, err := NewMux(ctx, cfg)
 
 	defer cleanup()
 	if err != nil {

@@ -1,10 +1,11 @@
-package controller
+package main
 
 import (
 	"context"
 	"net/http"
 
 	"cheki-back/config"
+	"cheki-back/controller"
 	"cheki-back/db"
 	"cheki-back/middleware"
 	"github.com/go-chi/chi/v5"
@@ -14,7 +15,7 @@ import (
 func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), error) {
 	mux := chi.NewRouter()
 	mux.Use(mid.Logger)
-	mux.Get("/health", middleware.AddHeader(GetHealth))
+	mux.Get("/health", middleware.AddHeader(controller.GetHealth))
 
 	_, cleanup, err := db.New(ctx, cfg)
 	if err != nil {
