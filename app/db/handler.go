@@ -1,24 +1,22 @@
 package db
 
 import (
-	"cheki-back/config"
 	"context"
-	"database/sql"
 	"fmt"
 	"log"
-	"time"
 
+	"cheki-back/config"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
 func New(ctx context.Context, cfg *config.Config) (*sqlx.DB, func(), error) {
-	var db *sql.DB
+	var db *sqlx.DB
 	count := 0
 
 	for {
 		log.Printf("This is %d", count)
-		dbTemp, err := sql.Open("mysql",
+		xdb, err := sqlx.Open("mysql",
 			fmt.Sprintf(
 				"%s:%s@tcp(%s:%d)/%s?parseTime=true",
 				cfg.DBUser, cfg.DBPassword,
@@ -34,15 +32,7 @@ func New(ctx context.Context, cfg *config.Config) (*sqlx.DB, func(), error) {
 			count += 1
 			continue
 		}
-		db = dbTemp
 		fmt.Println("Succeeded to connect DB")
-		break
+		return xdb, func() { _ = db.Close() }, nil
 	}
-	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
-	defer cancel()
-
-	time.Sleep(5 * time.Second)
-
-	xdb := sqlx.NewDb(db, "mysql")
-	return xdb, func() { _ = db.Close() }, nil
 }

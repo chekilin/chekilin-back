@@ -1,7 +1,6 @@
 package main
 
 import (
-	"cheki-back/controller"
 	"context"
 	"fmt"
 	"log"
@@ -9,6 +8,7 @@ import (
 	"os"
 
 	"cheki-back/config"
+	"cheki-back/controller"
 )
 
 func main() {
