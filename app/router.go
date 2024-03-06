@@ -17,10 +17,12 @@ func NewMux(ctx context.Context, cfg *config.Config) (http.Handler, func(), erro
 	mux.Use(mid.Logger)
 	mux.Get("/health", middleware.AddHeader(controller.GetHealth))
 
-	_, cleanup, err := db.New(ctx, cfg)
+	xdb, cleanup, err := db.New(ctx, cfg)
 	if err != nil {
 		return nil, cleanup, err
 	}
+	at := &controller.SqlxUser{DB: xdb}
+	mux.Get("/users", at.GetUser)
 
 	return mux, cleanup, nil
 }
