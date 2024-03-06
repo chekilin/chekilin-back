@@ -9,11 +9,8 @@ services:
       args:
         - target=dev
     environment:
-      PORT: 8080
       CHEKI_DB_HOST: cheki-db
       CHEKI_DB_PORT: 3306
-      CHEKI_DB_USER: cheki
-      CHEKI_DB_PASSWORD: cheki
       CHEKI_DB_DATABASE: cheki
 
     volumes:
@@ -24,7 +21,7 @@ services:
   db:
     image: mysql:8.0.29
     platform: linux/amd64
-    container_name: booked_db
+    container_name: cheki-db
     volumes:
       - db-data:/var/lib/mysql
     environment:
@@ -33,7 +30,7 @@ services:
       - MYSQL_PASSWORD=password
       - MYSQL_DATABASE=cheki
     ports:
-      - "3306:3306"
+      - "3306:33306"
 
 volumes:
   db-data:
