@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -11,7 +10,7 @@ import (
 
 type Config struct {
 	Port       int    `env:"PORT" envDefault:"8080"`
-	DBHost     string `env:"CHEKI_DB_HOST"`
+	DBHost     string `env:"CHEKI_DB_HOST" envDefault:"127.0.0.1"`
 	DBPort     int    `env:"CHEKI_DB_PORT" envDefault:"33306"`
 	DBUser     string `env:"CHEKI_DB_USER"`
 	DBPassword string `env:"CHEKI_DB_PASSWORD"`
@@ -25,7 +24,7 @@ func New() (*Config, error) {
 
 	cfg := &Config{}
 	if err := env.Parse(cfg); err != nil {
-		fmt.Println(err)
+		log.Fatalf("%v", err)
 		return nil, err
 	}
 
