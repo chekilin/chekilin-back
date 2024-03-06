@@ -7,7 +7,7 @@ bin = "tmp/main"
 
 full_bin = "APP_ENV=dev APP_USER=air ./tmp/main 80"
 
-include_ext = ["go", "tpl", "tmpl", "html"]
+include_ext = ["go", "tpl", "tmpl", "html" ]
 exclude_dir = ["assets", "tmp", "vendor"]
 include_dir = []
 exclude_file = []
