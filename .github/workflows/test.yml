@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     steps:
     - uses: actions/setup-go@v3
       with:
