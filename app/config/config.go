@@ -11,7 +11,7 @@ import (
 
 type Config struct {
 	Port       int    `env:"PORT" envDefault:"8080"`
-	DBHost     string `env:"CHEKI_DB_HOST" envDefault:"127.0.0.1"`
+	DBHost     string `env:"CHEKI_DB_HOST"`
 	DBPort     int    `env:"CHEKI_DB_PORT" envDefault:"33306"`
 	DBUser     string `env:"CHEKI_DB_USER"`
 	DBPassword string `env:"CHEKI_DB_PASSWORD"`

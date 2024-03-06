@@ -3,21 +3,35 @@ package db
 import (
 	"cheki-back/config"
 	"context"
+	"database/sql"
+	"fmt"
+	"log"
+	"time"
 
-	_ "github.com/go-sql-driver/mysql" // Using MySQL driver
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
 func New(ctx context.Context, cfg *config.Config) (*sqlx.DB, func(), error) {
-	//DB, err := sqlx.Open("mysql", "cheki:cheki@(172.17.0.2:3306)/cheki")
+	db, err := sql.Open("mysql",
+		fmt.Sprintf(
+			"%s:%s@tcp(%s:%d)/%s?parseTime=true",
+			cfg.DBUser, cfg.DBPassword,
+			cfg.DBHost, cfg.DBPort,
+			cfg.DBName,
+		),
+	)
+	if err != nil {
+		log.Fatalf("failed to open db: %v", err)
+		return nil, nil, err
+	}
 
-	//if err != nil {
-	//	return DB, nil, nil
-	//}
-	//err = DB.Ping()
-	//if err != nil {
-	//	return nil, nil, nil
-	//}
+	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
+	defer cancel()
 
-	return nil, nil, nil
+	if err := db.PingContext(ctx); err != nil {
+		return nil, func() { _ = db.Close() }, err
+	}
+	xdb := sqlx.NewDb(db, "mysql")
+	return xdb, func() { _ = db.Close() }, nil
 }

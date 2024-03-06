@@ -1,23 +1,25 @@
-package config
+package config_test
 
 import (
-	"fmt"
+	"os"
 	"testing"
 
-	"github.com/joho/godotenv"
+	"cheki-back/config"
 )
 
 func TestNew(t *testing.T) {
-	err := godotenv.Load("./env/.env.test")
-	wantPort := 3333
-	t.Setenv("PORT", fmt.Sprint(wantPort))
-
-	got, err := New()
+	cfg, err := config.New()
 	if err != nil {
 		t.Fatalf("cannot create config: %v", err)
 	}
 
-	if got.Port != wantPort {
-		t.Errorf("want %d, but %d", wantPort, got.Port)
+	want := os.Getenv("CHEKI_DB_USER")
+	if got := cfg.DBUser; got != want {
+		t.Errorf("Got %s, want %s", got, want)
+	}
+
+	want = os.Getenv("CHEKI_DB_PASSWORD")
+	if got := cfg.DBPassword; got != want {
+		t.Errorf("Got %s, want %s", got, want)
 	}
 }
