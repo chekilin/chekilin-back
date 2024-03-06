@@ -13,25 +13,36 @@ import (
 )
 
 func New(ctx context.Context, cfg *config.Config) (*sqlx.DB, func(), error) {
-	db, err := sql.Open("mysql",
-		fmt.Sprintf(
-			"%s:%s@tcp(%s:%d)/%s?parseTime=true",
-			cfg.DBUser, cfg.DBPassword,
-			cfg.DBHost, cfg.DBPort,
-			cfg.DBName,
-		),
-	)
-	if err != nil {
-		log.Fatalf("failed to open db: %v", err)
-		return nil, nil, err
-	}
+	var db *sql.DB
+	count := 0
 
+	for {
+		log.Printf("This is %d", count)
+		dbTemp, err := sql.Open("mysql",
+			fmt.Sprintf(
+				"%s:%s@tcp(%s:%d)/%s?parseTime=true",
+				cfg.DBUser, cfg.DBPassword,
+				cfg.DBHost, cfg.DBPort,
+				cfg.DBName,
+			),
+		)
+		if err != nil {
+			log.Printf("count: %d  Failed to open db: %v", count, err)
+			if count > 10 {
+				return nil, nil, err
+			}
+			count += 1
+			continue
+		}
+		db = dbTemp
+		fmt.Println("Succeeded to connect DB")
+		break
+	}
 	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
 	defer cancel()
 
-	if err := db.PingContext(ctx); err != nil {
-		return nil, func() { _ = db.Close() }, err
-	}
+	time.Sleep(5 * time.Second)
+
 	xdb := sqlx.NewDb(db, "mysql")
 	return xdb, func() { _ = db.Close() }, nil
 }
